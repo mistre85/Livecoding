@@ -1,8 +1,9 @@
 ﻿// ----------- VARIABILI GLOBALI ------------
 Autorimessa autorimessa = new Autorimessa();
 
+
 // ------------- PROGRAMMA PRINCIPALE -------------
-Console.WriteLine("Il tuo numero di auto a disposizione è: " + autorimessa.GetPostiDisponibili());
+Console.WriteLine("Il tuo numero di auto a disposizione è: " + autorimessa.PostiDisponibili);
 
 bool continua = true;
 
@@ -47,7 +48,7 @@ while (continua)
             break;
     }
 
-    Console.WriteLine("Il tuo numero di auto a disposizione è: " + autorimessa.GetPostiDisponibili());
+    Console.WriteLine("Il tuo numero di auto a disposizione è: " + autorimessa.PostiDisponibili);
 
     autorimessa.StampaAuto();
 
@@ -55,31 +56,33 @@ while (continua)
 
 public class Auto
 {
-    private string modello;
-    private int annoDiProduzione;
 
-    public string Modello
-    {
-        get
-        {
-            return modello;
-        }
-    }
+    public int AnnoDiProduzione { private get; set; }
+
+    public string Modello { get; }
 
     public Auto(string modello, int annoDiProduzione)
     {
-        this.modello = modello;
-        this.annoDiProduzione = annoDiProduzione;
+        this.Modello = modello;
+        this.AnnoDiProduzione = annoDiProduzione;
     }
+
 }
 
 public class Autorimessa
 {
     //private int massimoNumeroDiPostiAuto; //sostituita da .Lenght di autoPresenti
-    private int numeroAutoPresenti;
+    public int NumeroAutoPresenti { get; private set; }
+
+    public int PostiDisponibili { 
+        get
+        {
+            return (autoPresenti.Length - NumeroAutoPresenti);
+        } 
+    }
 
     //LAST IN FIRST OUT = LIFO
-    Auto[] autoPresenti;
+    private Auto[] autoPresenti;
 
     //inizializza una autorimessa con 5 posti auto
     public Autorimessa()
@@ -105,11 +108,11 @@ public class Autorimessa
      * */
     public bool AggiungiAuto(string modello, int anno)
     {
-        if (numeroAutoPresenti < autoPresenti.Length)
+        if (NumeroAutoPresenti < autoPresenti.Length)
         {
             //Auto nuovaAuto = new Auto(modello,anno);
-            autoPresenti[numeroAutoPresenti] = new Auto(modello, anno);
-            numeroAutoPresenti++;
+            autoPresenti[NumeroAutoPresenti] = new Auto(modello, anno);
+            NumeroAutoPresenti++;
             return true;
         }
 
@@ -120,33 +123,30 @@ public class Autorimessa
 
     public bool RimuoviAuto()
     {
-        if (numeroAutoPresenti > 0)
+        if (NumeroAutoPresenti > 0)
         {
-            numeroAutoPresenti--;
+            NumeroAutoPresenti--;
             //modelloAutoPosti[numeroAutoPresenti] = "";
             //annoDiProduzione[numeroAutoPresenti] = 0;
-            autoPresenti[numeroAutoPresenti] = null;
+            autoPresenti[NumeroAutoPresenti] = null;
             return true;
         }
 
         return false;
     }
 
-    public int GetPostiDisponibili()
-    {
-        return (autoPresenti.Length - numeroAutoPresenti);
-    }
+
 
     public void StampaAuto()
     {
-        if (numeroAutoPresenti == 0)
+        if (NumeroAutoPresenti == 0)
         {
             Console.WriteLine("Nessuna auto presente");
         }
         else
         {
             Console.WriteLine("--- auto presenti ---");
-            for (int i = 0; i < numeroAutoPresenti; i++)
+            for (int i = 0; i < NumeroAutoPresenti; i++)
             {
                 Console.WriteLine("Posto {0} - {1}", (i + 1), autoPresenti[i].Modello);
             }
