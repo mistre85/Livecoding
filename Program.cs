@@ -1,129 +1,156 @@
-﻿
-using System.Reflection.Metadata.Ecma335;
+﻿// ----------- VARIABILI GLOBALI ------------
+Autorimessa autorimessa = new Autorimessa();
 
-Console.WriteLine("Inserisci base rettangolo:");
-int baseRettangolo = Convert.ToInt32(Console.ReadLine());
+// ------------- PROGRAMMA PRINCIPALE -------------
+Console.WriteLine("Il tuo numero di auto a disposizione è: " + autorimessa.GetPostiDisponibili());
 
-Console.WriteLine("Inserisci altezza rettangolo:");
-int altezzaRettangolo = Convert.ToInt32(Console.ReadLine());
+bool continua = true;
 
-
-Rettangolo rettangoloUtente = new Rettangolo(baseRettangolo, altezzaRettangolo);
-
-
-Console.WriteLine("Area rettangolo utente: " + rettangoloUtente.Area());
-Console.WriteLine("Perimetro rettangolo utente: " + rettangoloUtente.Perimetro());
-
-
-rettangoloUtente.Stampa();
-
-for(int i=0; i < 100; i++)
+while (continua)
 {
-    Rettangolo casuale = new Rettangolo();
-    Console.WriteLine("--- rettangolo " + (i + 1) + "-----");
-    casuale.Stampa();
-    Console.WriteLine("----------------------------------");
+    Console.Write("Vuoi aggiungere o rimuovere un auto [aggiungi/rimuovi]? Inserisci \"esci\" per terminare: ");
+    string risposta = Console.ReadLine();
+
+    switch (risposta)
+    {
+        case "aggiungi":
+            Console.WriteLine("Dimmi la modello auto: ");
+            string modelloAuto = Console.ReadLine();
+
+            Console.WriteLine("Dimmi anno di produzione dell'auto: ");
+            int annoProduzione = int.Parse(Console.ReadLine());
+
+            if(!autorimessa.AggiungiAuto(modelloAuto, annoProduzione))
+            {
+                Console.WriteLine("Autorimessa pinea, impossibile aggiungere auto.");
+            }
+
+            break;
+
+        case "rimuovi":
+
+            if (!autorimessa.RimuoviAuto())
+            {
+                Console.WriteLine("Non ci sono auto da rimuovere!");
+            }
+
+            break;
+
+        case "esci":
+
+            continua = false;
+            
+            break;
+        default:
+
+            Console.WriteLine("Mi dispiace non è un opzione contemplata");
+            break;
+    }
+
+    Console.WriteLine("Il tuo numero di auto a disposizione è: " + autorimessa.GetPostiDisponibili());
+
+    autorimessa.StampaAuto();
+
 }
 
-
-
-//Consegna:
-//Nel progetto csharp-geometria creare le seguenti classi
-//1. Creare una classe Rettangolo con due attributi interi: **baseRettangolo * *e * *altezzaRettangolo * *.
-//  Aggiungere un opportuno costruttore con parametri.
-//  Aggiungere due metodi: **calcolaArea * *e * *calcolaPerimetro * *che calcolano e restituiscono, rispettivamente,
-//  l’area e il perimetro del rettangolo.
-//2. Poi, nel vostro programma principale (Program.cs) chiedete all’utente di inserire, da console,
-//i valori di base e di altezza con cui istanziare un nuovo Rettangolo.
-//Dopo averlo istanziato, stampate a video il perimetro e l’area.
-
-//3. Provate ad istanziare tanti rettangoli con nome diverso e attributi diversi (baseRettangolo e altezzaRettangolo)
-//e provate a stampare le loro proprietà ad esempio con un metodo StampaRettangolo che vi stampi il vostro rettangolo ad esempio cosi:
-
-//——  Rettangolo1  ——
-//base: 20 cm
-//altezza: 10 cm
-//Perimetro: 60 cm
-//Area: 200 cm2
-
-//** BONUS**
-//Aggiungere alla classe Rettangolo un metodo “disegna” che disegna in console il rettangolo con le sue dimensioni, ossia tanti “—” (due trattini) orizzontali quanto è grande la sua base e tanti ‘|’ verticali quanto e grande la sua altezza.
-
-
-public class Rettangolo
+public class Auto
 {
-    private int larghezza;
-    private int altezza;
+    private string modello;
+    private int annoDiProduzione;
+
+    public string Modello
+    {
+        get
+        {
+            return modello;
+        }
+    }
+
+    public Auto(string modello, int annoDiProduzione)
+    {
+        this.modello = modello;
+        this.annoDiProduzione = annoDiProduzione;
+    }
+}
+
+public class Autorimessa
+{
+    //private int massimoNumeroDiPostiAuto; //sostituita da .Lenght di autoPresenti
+    private int numeroAutoPresenti;
+
+    //LAST IN FIRST OUT = LIFO
+    Auto[] autoPresenti;
+
+    //inizializza una autorimessa con 5 posti auto
+    public Autorimessa()
+    {
+        //numeroAutoPresenti = 0; c'è già il default
+
+
+        autoPresenti = new Auto[5];
+    }
+
+    //inizializza un'autorimessa con N posti auto
+    public Autorimessa(int massimoNumeroDiPostiAuto)
+    {
+        //this.numeroAutoPresenti = 0; //cè già il default
+        autoPresenti = new Auto[massimoNumeroDiPostiAuto];
+
+    }
 
     /*
-     *
-     *Genera un rettangolo con base e altezza casuali tra
-     *1 e 1000 (compreso)
-     */
-    public Rettangolo()
+     * costruisce e aggiunge una auto nell'autorimessa,
+     * se l'inserimento avviene con successo restituisce true
+     * altrimenti false
+     * */
+    public bool AggiungiAuto(string modello, int anno)
     {
-        larghezza = new Random().Next(1, 1001);
-        altezza = new Random().Next(1, 1001);
-    }
-
-    /*
-     * genera un rettangolo specificando un valore di base e altezza
-     */
-    public Rettangolo(int larghezza, int altezza)
-    {
-        this.larghezza = larghezza;
-        this.altezza = altezza;
-    }
-
-    public int Area()
-    {
-        return larghezza * altezza;
-    }
-
-    public int Perimetro()
-    {
-        return (larghezza * 2) + (altezza * 2);
-    }
-
-    public int GetLarghezza()
-    {
-        return this.larghezza;
-    }
-
-    public int GetAltezza()
-    {
-        return this.altezza;
-    }
-
-    public void SetLarghezza(int baseRettangolo)
-    {
-        if(baseRettangolo < 0)
+        if (numeroAutoPresenti < autoPresenti.Length)
         {
-            this.larghezza = Math.Abs(altezza);
+            //Auto nuovaAuto = new Auto(modello,anno);
+            autoPresenti[numeroAutoPresenti] = new Auto(modello, anno);
+            numeroAutoPresenti++;
+            return true;
         }
 
-        this.larghezza = baseRettangolo;
+
+        return false;
+
     }
 
-    public void SetAltezza(int altezza)
+    public bool RimuoviAuto()
     {
-        if (altezza < 0)
+        if (numeroAutoPresenti > 0)
         {
-            this.larghezza = Math.Abs(altezza);
+            numeroAutoPresenti--;
+            //modelloAutoPosti[numeroAutoPresenti] = "";
+            //annoDiProduzione[numeroAutoPresenti] = 0;
+            autoPresenti[numeroAutoPresenti] = null;
+            return true;
         }
 
-        this.altezza = altezza;
+        return false;
     }
 
-    public void Stampa() {
+    public int GetPostiDisponibili()
+    {
+        return (autoPresenti.Length - numeroAutoPresenti);
+    }
 
-        //base: 20 cm
-        Console.WriteLine("base:" + larghezza + "cm");
-        //altezza: 10 cm
-        Console.WriteLine("altezza:" + altezza + "cm") ;
-        //Perimetro: 60 cm
-        Console.WriteLine("perimetro:" + Perimetro() + "cm");
-        //Area: 200 cm2
-        Console.WriteLine("area:" + this.Area() + "cm^2");
+    public void StampaAuto()
+    {
+        if (numeroAutoPresenti == 0)
+        {
+            Console.WriteLine("Nessuna auto presente");
+        }
+        else
+        {
+            Console.WriteLine("--- auto presenti ---");
+            for (int i = 0; i < numeroAutoPresenti; i++)
+            {
+                Console.WriteLine("Posto {0} - {1}", (i + 1), autoPresenti[i].Modello);
+            }
+            Console.WriteLine("--- ------------ ---");
+        }
     }
 }
