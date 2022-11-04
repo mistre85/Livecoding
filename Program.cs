@@ -1,156 +1,130 @@
-﻿// ----------- VARIABILI GLOBALI ------------
-Autorimessa autorimessa = new Autorimessa();
+﻿////agenzia immobiliare
+//Si vuole progettare un'applicazione in grado di gestire un'agenzia immobiliare.
+//Gli immobili sono caratterizzati da:
+
+//- un codice alfanumerico,
+//- indirizzo,
+//- cap,
+//- città
+//- una superficie espressa in mq attraverso un numero intero.
+
+//Immobile im = new Immobile("112022");
+Box bx = new Box(new Random().Next(0, 100000).ToString());
+Abitazione ab = new Abitazione(new Random().Next(0, 100000).ToString());
+Villa vl = new Villa(new Random().Next(0, 100000).ToString());
+
+//Console.WriteLine(im.ToString());
+Console.WriteLine(bx.ToString());
+Console.WriteLine(ab.ToString());
+Console.WriteLine(vl.ToString());
+
+List<Immobile> immobili = new List<Immobile>();
+
+immobili.Add(vl);
+immobili.Add(ab);
+immobili.Add(bx);
 
 
-// ------------- PROGRAMMA PRINCIPALE -------------
-Console.WriteLine("Il tuo numero di auto a disposizione è: " + autorimessa.PostiDisponibili);
+//Console.WriteLine("Scrivi l'immobile da cercare:");
+//string codiceUtente = Console.ReadLine();
 
-bool continua = true;
-
-while (continua)
+foreach(Immobile item in immobili)
 {
-    Console.Write("Vuoi aggiungere o rimuovere un auto [aggiungi/rimuovi]? Inserisci \"esci\" per terminare: ");
-    string risposta = Console.ReadLine();
-
-    switch (risposta)
+  //  if(item.Codice == codiceUtente)
     {
-        case "aggiungi":
-            Console.WriteLine("Dimmi la modello auto: ");
-            string modelloAuto = Console.ReadLine();
+    
+        Console.WriteLine("Trovato immobile: {0} di tipi {1}" , item.ToString(), item.GetType().ToString());
 
-            Console.WriteLine("Dimmi anno di produzione dell'auto: ");
-            int annoProduzione = int.Parse(Console.ReadLine());
-
-            if(!autorimessa.AggiungiAuto(modelloAuto, annoProduzione))
-            {
-                Console.WriteLine("Autorimessa pinea, impossibile aggiungere auto.");
-            }
-
-            break;
-
-        case "rimuovi":
-
-            if (!autorimessa.RimuoviAuto())
-            {
-                Console.WriteLine("Non ci sono auto da rimuovere!");
-            }
-
-            break;
-
-        case "esci":
-
-            continua = false;
-            
-            break;
-        default:
-
-            Console.WriteLine("Mi dispiace non è un opzione contemplata");
-            break;
     }
-
-    Console.WriteLine("Il tuo numero di auto a disposizione è: " + autorimessa.PostiDisponibili);
-
-    autorimessa.StampaAuto();
-
+    
 }
 
-public class Auto
+Villa primoImmobile = (Villa)immobili[0];
+Console.WriteLine(primoImmobile.ToString());
+
+
+public class Immobile
 {
+    //alfanumerico
+    public string Codice { get; set; }
+    public string Indirizzo { get; set; }
+    public string Cap { get; set; }
+    public string Città { get; set; }
 
-    public int AnnoDiProduzione { private get; set; }
+    //metri quadrati
+    public int Superficie { get; set; }
 
-    public string Modello { get; }
-
-    public Auto(string modello, int annoDiProduzione)
+    public Immobile(string codice)
     {
-        this.Modello = modello;
-        this.AnnoDiProduzione = annoDiProduzione;
+        Codice = codice;
+    }
+
+    public override string ToString()
+    {
+        return "IM" + Codice;
     }
 
 }
 
-public class Autorimessa
+public class Box : Immobile
 {
-    //private int massimoNumeroDiPostiAuto; //sostituita da .Lenght di autoPresenti
-    public int NumeroAutoPresenti { get; private set; }
-
-    public int PostiDisponibili { 
-        get
-        {
-            return (autoPresenti.Length - NumeroAutoPresenti);
-        } 
+    public int PostiAuto { get; set; }
+    public Box(string codice) : base(codice)
+    {
     }
 
-    //LAST IN FIRST OUT = LIFO
-    private Auto[] autoPresenti;
-
-    //inizializza una autorimessa con 5 posti auto
-    public Autorimessa()
+    public override string ToString()
     {
-        //numeroAutoPresenti = 0; c'è già il default
-
-
-        autoPresenti = new Auto[5];
-    }
-
-    //inizializza un'autorimessa con N posti auto
-    public Autorimessa(int massimoNumeroDiPostiAuto)
-    {
-        //this.numeroAutoPresenti = 0; //cè già il default
-        autoPresenti = new Auto[massimoNumeroDiPostiAuto];
-
-    }
-
-    /*
-     * costruisce e aggiunge una auto nell'autorimessa,
-     * se l'inserimento avviene con successo restituisce true
-     * altrimenti false
-     * */
-    public bool AggiungiAuto(string modello, int anno)
-    {
-        if (NumeroAutoPresenti < autoPresenti.Length)
-        {
-            //Auto nuovaAuto = new Auto(modello,anno);
-            autoPresenti[NumeroAutoPresenti] = new Auto(modello, anno);
-            NumeroAutoPresenti++;
-            return true;
-        }
-
-
-        return false;
-
-    }
-
-    public bool RimuoviAuto()
-    {
-        if (NumeroAutoPresenti > 0)
-        {
-            NumeroAutoPresenti--;
-            //modelloAutoPosti[numeroAutoPresenti] = "";
-            //annoDiProduzione[numeroAutoPresenti] = 0;
-            autoPresenti[NumeroAutoPresenti] = null;
-            return true;
-        }
-
-        return false;
-    }
-
-
-
-    public void StampaAuto()
-    {
-        if (NumeroAutoPresenti == 0)
-        {
-            Console.WriteLine("Nessuna auto presente");
-        }
-        else
-        {
-            Console.WriteLine("--- auto presenti ---");
-            for (int i = 0; i < NumeroAutoPresenti; i++)
-            {
-                Console.WriteLine("Posto {0} - {1}", (i + 1), autoPresenti[i].Modello);
-            }
-            Console.WriteLine("--- ------------ ---");
-        }
+        return "BX" + Codice;
     }
 }
+
+public class Abitazione : Immobile
+{
+    public int NumeroVani { get; set; }
+    public int NumeroBagni { get; set; }
+
+    public Abitazione(string codice) : base(codice)
+    {
+    }
+
+    public override string ToString()
+    {
+        return "AB" + Codice;
+    }
+}
+
+public class Villa : Abitazione
+{
+   
+    public int SuperficieGiardino { get; set; }
+
+    public Villa(string codice) : base(codice)
+    {
+    }
+
+    public override string ToString()
+    {
+        return "VL" + Codice;
+    }
+
+}
+
+//Definire all’interno della classe Immobile un attributo per memorizzare il numero di persone interessate all’acquisto e aggiungere un metodo per incrementare questo numero.
+
+//L'agenzia gestisce diverse tipologie di immobili:
+
+//- Box
+//- Abitazione
+//- Ville.
+
+//Per i box è riportato il numero di posti auto.
+//Per le abitazioni è riportato il numero di vani e il numero di bagni.
+//Per le ville è previsto, in aggiunta rispetto all'abitazione, la dimensione in mq di giardino.
+
+//Ridefinire per ciascuna delle tre classi il metodo ToString() in modo da fornire una descrizione completa dell'immobile.
+
+//**BONUS:**
+//Definire una funzione di ricerca per gli immobili,
+//che preso in input un codice alfanumerico restituisce l’immobile corrispondente.
+//Se l’immobile non viene trovato restituisce null.
