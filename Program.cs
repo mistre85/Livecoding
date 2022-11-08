@@ -1,34 +1,30 @@
-﻿Banca intesa = new Banca("Intesa san Paolo");
+﻿// classe astratta
 
+//Animale animale = new Animale();
 
-Console.WriteLine("Sistema amministrazione banca " + intesa.Nome);
+Mucca mucca = new Mucca();
 
-//aggiunta di un prestito
-// 1. chiedo all'utente di cercare il cliente su cui si vuole creare un prestito
-Console.WriteLine("Creazione di un nuovo prestito");
-Console.WriteLine();
+mucca.FaiVerso();
 
-
-//int stipendio = Banca.RichiediInputInt("inserisci stipendio");
-string codiceFiscale = Banca.RichiediInput("inserisci codice fiscale");
-Cliente esistente = intesa.RicercaCliente(codiceFiscale);
-
-if(esistente == null)
-{
-    Console.WriteLine("errore: Cliente non trovato!");
-}
-else
+public abstract class Animale
 {
 
-    Console.WriteLine("Ammontare del prestito: ");
-    string input = Console.ReadLine();
-    int ammontarePrestito = Convert.ToInt32(input);
+    //metodo astratto
+    public abstract void FaiVerso();
 
-
-    Prestito nuovoPrestito = new Prestito(0,ammontarePrestito,0,new DateOnly(), esistente);
-
-    intesa.AggiungiPrestito(nuovoPrestito);
+    //metodo normale
+    public void Dormi()
+    {
+        Console.WriteLine("Zzzzzz");
+    }
 }
 
-Console.WriteLine("Nome\tCognome\t\tCodiceFiscale\t\tNumero Prestiti");
-Console.WriteLine("Paolo\tMistretta\tmstpaaaxxll81823\t10");
+// classe derivata
+public class Mucca : Animale
+{
+    //override
+    public override void FaiVerso()
+    {
+        Console.WriteLine("Muuu");
+    }
+}
