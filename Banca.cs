@@ -128,4 +128,21 @@ public class Banca
     {
        
     }
+
+
+    public static string RichiediInput(string messaggio)
+    {
+        Console.Write(messaggio + ":");
+
+        string input = Console.ReadLine();
+
+        return input;
+    }
+
+    public static int RichiediInputInt(string messaggio)
+    {
+        string input = Banca.RichiediInput(messaggio);
+
+        return Convert.ToInt32(input);
+    }
 }

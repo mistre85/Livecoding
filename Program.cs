@@ -7,9 +7,10 @@ Console.WriteLine("Sistema amministrazione banca " + intesa.Nome);
 // 1. chiedo all'utente di cercare il cliente su cui si vuole creare un prestito
 Console.WriteLine("Creazione di un nuovo prestito");
 Console.WriteLine();
-Console.WriteLine("Inserisci il codice fiscale:");
-string codiceFiscale = Console.ReadLine();
 
+
+//int stipendio = Banca.RichiediInputInt("inserisci stipendio");
+string codiceFiscale = Banca.RichiediInput("inserisci codice fiscale");
 Cliente esistente = intesa.RicercaCliente(codiceFiscale);
 
 if(esistente == null)
@@ -20,8 +21,14 @@ else
 {
 
     Console.WriteLine("Ammontare del prestito: ");
-    int ammontarePrestito = Convert.ToInt32(Console.ReadLine());
+    string input = Console.ReadLine();
+    int ammontarePrestito = Convert.ToInt32(input);
+
+
     Prestito nuovoPrestito = new Prestito(0,ammontarePrestito,0,new DateOnly(), esistente);
 
     intesa.AggiungiPrestito(nuovoPrestito);
 }
+
+Console.WriteLine("Nome\tCognome\t\tCodiceFiscale\t\tNumero Prestiti");
+Console.WriteLine("Paolo\tMistretta\tmstpaaaxxll81823\t10");
