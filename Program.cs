@@ -154,6 +154,6 @@ public class Aereo : IInterazione, IInterazioneAccessori
 
     public void Chiudi()
     {
-        throw new NotImplementedException();
+       //
     }
 }
