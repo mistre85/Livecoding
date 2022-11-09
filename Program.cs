@@ -1,159 +1,88 @@
 ﻿
-using System.Collections;
 
-List<Immobile> immobili = new List<Immobile>();
+Console.WriteLine("Inserisci un numero da 1 a 10");
 
-immobili.Add(new Abitazione());
-immobili.Add(new Abitazione());
-immobili.Add(new Villa());
-immobili.Add(new Villa());
-immobili.Add(new Villa());
-immobili.Add(new Box());
-immobili.Add(new Box());
+bool continua = true;
 
-
-//agente immobiliare
-foreach (Immobile im in immobili)
+while (continua)
 {
-    Console.WriteLine();
-    Console.WriteLine(im.Aperto ? "Aperto" : "Chiuso");
-
-    //Console.WriteLine(im.GetType().ToString());
-    im.Apri();
-    Console.WriteLine(im.Aperto ? "Aperto" : "Chiuso");
-}
-
-
-//imprise di pulizie
-List<IInterazioneAccessori> immobiliDaPulire = new List<IInterazioneAccessori>();
-
-immobiliDaPulire.Add(new Abitazione());
-immobiliDaPulire.Add(new Abitazione());
-immobiliDaPulire.Add(new Villa());
-immobiliDaPulire.Add(new Villa());
-immobiliDaPulire.Add(new Villa());
-immobiliDaPulire.Add(new Aereo());
-//immobiliDaPulire.Add(new Box());
+	try
+	{
+		Console.WriteLine("Inserisci numeratore");
+        int numeratore = Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine("Inserisci Denominatore");
+        int denominatore = Convert.ToInt32(Console.ReadLine());
 
 
-//agente immobiliare
-foreach (IInterazioneAccessori item in immobiliDaPulire)
-{
-    item.ApriFinestra(); 
-}
+		int divisione = numeratore / denominatore;
 
-public interface IInterazione
-{
-    public void Apri();
+		Console.WriteLine("La divisione tra {0} e {1} è {2}", numeratore, denominatore, divisione);
+    
+       
 
-    public  void Chiudi();
-}
+        int[] numbers = { 1, 2, 3 };
 
-public interface IInterazioneAccessori
-{
-    public void ApriFinestra();
-}
+        numbers[5]++;
 
-public abstract class Immobile : IInterazione
-{
-    public bool Aperto { get; protected set; }
-    public int Codice { get; set; }
-    public int Superfice { get; set; }
+        continua = false;
 
-    //esposizione
-    //luminosità
-
-    public abstract void Apri();
-
-    public abstract void Chiudi();
-
-  
-
-}
-
-public class Box: Immobile
-{
-    public int NumeroPostiAuto { get; set; }
-
-    public override void Apri()
-    {
-        Console.WriteLine("Telecomando attivato");
-        Console.WriteLine("Box aperto");
-        Aperto = true;
     }
-
-    public override void Chiudi()
+    catch (FormatException e)
     {
-        Console.WriteLine("Telecomando attivato");
-        Console.WriteLine("Box chiuso");
-        Aperto = false;
+        Console.WriteLine("error: Devi inserire un numero e non una parola");
+    }
+    catch (DivideByZeroException e)
+    {
+        Console.WriteLine("error: Non puoi dividere per 0");
+    }
+    catch (Exception e)
+    {
+        //qualunque altra eccezione che dovesse capitare
+        Console.WriteLine("Opps! Qualcosa è andato storto");
+        Console.WriteLine(e.Message);
     }
 
 }
 
-public class Abitazione : Immobile , IInterazioneAccessori
+
+
+void StampaDivisione(int numeratore, int denominatore)
 {
-    public int Vani { get; set; }
-    public int NumeroBagni { get; set; }
 
-    public override void Apri()
+    if (denominatore == 0)
+        throw new Exception();
+
+    Console.WriteLine(numeratore / denominatore);
+
+
+
+}
+
+void ConsoleApplication()
+{
+
+    Funzione2();
+
+}
+
+void Funzione2()
+{
+    try
     {
-        Console.WriteLine("Chiave inserita");
-        Console.WriteLine("Abitazione aperta");
-        Aperto = true;
+        Funzione3();
     }
-
-    public void ApriFinestra()
+    catch (Exception e)
     {
-        Console.WriteLine("Finestra aperta");
-    }
 
-    public override void Chiudi()
-    {
-        Console.WriteLine("Chiave inserita");
-        Console.WriteLine("Abitazione chiusa");
-        Aperto = false;
     }
 }
 
-public class Villa : Immobile, IInterazioneAccessori
+void Funzione3()
 {
-    public int SuperficeGiardino { get; set; }
+    StampaDivisione(10, 0);
 
-    public override void Apri()
-    {
-        Console.WriteLine("Chiave inserita");
-        Console.WriteLine("Villa aperta");
-        Aperto = true;
-    }
 
-    public void ApriFinestra()
-    {
-        Console.WriteLine("Apri finestra");
-    }
-
-    public override void Chiudi()
-    {
-        Console.WriteLine("Chiave inserita");
-        Console.WriteLine("Villa chiusa");
-        Aperto = false;
-    }
 }
 
-public class Aereo : IInterazione, IInterazioneAccessori
-{
-    public void Apri()
-    {
-        //
-    }
 
-    public void ApriFinestra()
-    {
-       //
-    }
-
-    public void Chiudi()
-    {
-       //
-    }
-}
+ConsoleApplication();
